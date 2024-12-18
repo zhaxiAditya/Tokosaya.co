@@ -45,7 +45,7 @@
                     <?= $validation->listErrors() ?>
                 </div>
             <?php endif; ?>
-              <input type="text" name="idUser" value="<?php echo $iduser ?>">
+              <input type="hidden" name="idUser" value="<?php echo $iduser ?>">
               <label for="nama_barang">Nama Produk:</label>
               <input type="text" id="nama_barang" name="nama_barang" required value="<?php echo old('nama_barang');?>" >
         
@@ -53,7 +53,7 @@
               <select id="kategori" name="kategori">
                 <option value="Elektronik">Elektronik</option>
                 <option value="Fashion">Fashion</option>
-                <option value="Makanan">Makanan</option>
+                <option value="Makanan">Makanan & Minuman</option>
                 <option value="Kecantikan & Perawatan Diri">Kecantikan & Perawatan Diri</option>
                 <option value="Perlengkapan Rumah Tangga">Perlengkapan Rumah Tangga</option>
                 <option value="Olahraga & Hobi">Olahraga & Hobi</option>
@@ -69,10 +69,7 @@
         
               <label for="harga">Harga:</label>
               <input type="number" id="harga" name="harga" required value="<?php echo old('harga');?>">
-
-              <label for="harga">Tanggal exp:</label>
-              <input type="date" id="harga" name="expDate" required value="<?php echo old('expDate');?>">
-              <br>
+              
               <div class="button-container">
                 <button type="submit">Simpan</button>
                 <button type="button" style="background-color: red;">Batal</button>

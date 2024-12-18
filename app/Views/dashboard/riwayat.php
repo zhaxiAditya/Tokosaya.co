@@ -1,4 +1,3 @@
-
 <style>
     .search {
         display: flex;
@@ -12,37 +11,6 @@
     width: 80%;
     border-radius: 8px;
     overflow: hidden;
-    }
-    .search a {
-        display: flex;
-        flex-direction: row;
-        gap: 1rem;
-        align-items: center;
-    }
-
-    .search a {
-        padding: 0.5rem 0.8rem;
-        text-decoration: none;
-        background-color: #696868;
-        font-weight: 600;
-        color: #fefefe;
-        border-radius: 0.2rem;
-    }
-
-    td a {
-        display: flex;
-        flex-direction: row;
-        gap: 1rem;
-        align-items: center;
-    }
-
-    td a {
-        padding: 0.5rem 0.8rem;
-        text-decoration: none;
-        background-color: #696868;
-        font-weight: 600;
-        color: #fefefe;
-        border-radius: 0.2rem;
     }
 
     table {
@@ -83,6 +51,31 @@
         border: 1px solid #a7a7a7;
     }
 
+    .Baru {
+        background-color: #B7E0FF;
+        padding: 0.2rem 0.3rem;
+        font-weight: 600;
+        color: #ffffff;
+        border-radius: 5px;
+        text-align:center;
+    }
+    .Masuk {
+        background-color: #9EDF9C;
+        padding: 0.2rem 0.3rem;
+        font-weight: 600;
+        color: #ffffff;
+        border-radius: 5px;
+        text-align:center;
+    }
+    .Keluar {
+        background-color: #F72C5B;
+        padding: 0.2rem 0.3rem;
+        font-weight: 600;
+        color: #ffffff;
+        border-radius: 5px;
+        text-align:center;
+    }
+
 </style>
 <body>
     <div class="content">
@@ -92,13 +85,6 @@
             </div>
         <?php endif; ?>
         <h3 style="width: 80%;">Produk Toko</h3>
-        <div class="search">
-            <form action="" method="post">
-            <input type="text" name="keyword" placeholder="Cari Produk">
-            <button>Cari</button>
-            </form>
-            <a href="<?php echo base_url('dashboard/add');?>"><i class="fa-solid fa-plus"></i> Tambahkan Produk</a>
-        </div>
         <div class="table-container">
             <table>
                 <thead>
@@ -106,34 +92,28 @@
                         <th>No</th>
                         <th>Kode Produk</th>
                         <th>Nama Produk</th>
-                        <th>Kategori</th>
-                        <th>Harga</th>
+                        <th>Status</th>
                         <th>Jumlah</th>
-                        <th>Aksi</th>
+                        <th>Tanggal</th>
                     </tr>
                 </thead>
                 <tbody>
-                    <?php $i = 1 + (6 * ($const - 1)); ?>
+                    <?php $i = 1 + (6 * (1 - 1)); ?>
                     <?php foreach($produk as $k): ?>
                     <tr>
                         <td><?php echo $i ;?></td>
-                        <td><?php echo $k['kodeProduk'];?></td>
+                        <td><?php echo $k['KodeProduk'];?></td>
                         <td><?php echo $k['namaProduk'];?></td>
-                        <td><?php echo $k['kategori'];?></td>
-                        <td><?= number_format($k['harga'], 0, ',', '.'); ?></td>
+                        <td><div class="<?php echo $k['status'];?>"><?php echo $k['status'];?></div></td>
                         <td><?php echo $k['jumlah'];?></td>
-                        <td style="display: flex; gap: 1rem;">
-                            <a href="<?php echo base_url('dashboard/edit/') . $k['idProduk']; ?>">Edit</a>
-                            <a href="<?= base_url('dashboard/hapus/'.$k['idProduk']) ?>">Hapus</a>
-                        </td>
+                        <td><?php echo $k['tanggal'];?></td>
                     </tr>
                     <?php $i++; ?>
                     <?php endforeach; ?>
                 </tbody>
             </table>
-            <?= $pager->links('produk', 'pager') ?>
+            <?= $pager->links('riwayat', 'pager') ?>
         </div>
     </div>
 </body>
 </html>
-

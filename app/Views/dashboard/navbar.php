@@ -39,7 +39,7 @@
         gap: 1rem;
     }
 
-    a {
+    .nav-lift nav a {
         padding: 0.5rem 0.8rem;
         text-decoration: none;
         background-color: #696868;
@@ -47,10 +47,22 @@
         color: #fefefe;
         border-radius: 0.2rem;
     }
-    a:hover {
+    .nav-lift nav a:hover {
     color: inherit; /* Tidak mengubah warna teks */
     text-decoration: none; /* Tidak ada garis bawah saat hover */
-}
+    }
+    .nav-top section a {
+        padding: 0.5rem 0.8rem;
+        text-decoration: none;
+        background-color: #696868;
+        font-weight: 600;
+        color: #fefefe;
+        border-radius: 0.2rem;
+    }
+    .nav-top section a:hover {
+    color: inherit; /* Tidak mengubah warna teks */
+    text-decoration: none; /* Tidak ada garis bawah saat hover */
+    }
 
     
     .menu {
@@ -83,6 +95,16 @@
         align-items: center;
         padding: 1rem 0px 2rem 0px;
     }
+    .logout {
+        display: flex; justify-content:space-between;
+        align-items:center;
+        background-color: red;
+        color: #fefefe;
+        font-weight: 600;
+        text-decoration: none;
+        padding: 0.5rem 0.8rem;
+        border-radius: 0.2rem;
+    }
 
 </style>
 <body>
@@ -92,20 +114,20 @@
                 <i class="fa-solid fa-boxes-packing"></i>
                 <span>Produk</span>
             </a>
-            <a href="<?php echo base_url('dsahboard/add');?>" class="menu">
+            <a href="<?php echo base_url('dashboard/masuk');?>" class="menu">
                 <i class="fa-solid fa-right-to-bracket"></i>
                 <span>Produk Masuk</span>
             </a>
-            <a href="<?php echo base_url('test');?>" class="menu">
+            <a href="<?php echo base_url('dashboard/keluar');?>" class="menu">
                 <i class="fa-solid fa-arrow-right-from-bracket"></i>
                 <span>Produk Keluar</span>
             </a>
-            <a href="<?php echo base_url('test');?>" class="menu">
+            <a href="<?php echo base_url('dashboard/riwayat');?>" class="menu">
                 <i class="fa-solid fa-right-left"></i>
                 <span>Riwayat Produk</span>
             </a>
         </nav>
-        <a href="<?php echo base_url('/logout');?>" style="display: flex; justify-content: space-between; align-items: center; background-color: red; color: #fefefe;">
+        <a href="<?php echo base_url('/logout');?>" class="logout">
             <span>keluar</span>
             <i class="fa-solid fa-ellipsis-vertical"></i>
         </a>

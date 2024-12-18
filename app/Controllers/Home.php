@@ -37,7 +37,7 @@ class Home extends BaseController
         // Validasi input
         if (!$this->validate([
             'email' => [
-                'rules' => 'is_unique[usermember.email]|required|valid_email',
+                'rules' => 'is_unique[pemilikToko.email]|required|valid_email',
                 'errors' => [
                     'is_unique' => '{field} sudah digunakan',
                     'required' => '{field} belum diisi',
@@ -45,9 +45,11 @@ class Home extends BaseController
                 ],
             ],
             'pass' => [
-                'rules' => 'required',
+                'rules' => 'required|min_length[7]|regex_match[/^[A-Za-z0-9]*$/]',
                 'errors' => [
-                    'required' => '{field} belum diisi'
+                    'required' => 'password belum diisi',
+                    'min_length' => 'password minimal 7 karakter',
+                    'regex_match' => 'password tidak mengunakan karakter khusus'
                 ]
             ]
         ])) {
@@ -58,7 +60,8 @@ class Home extends BaseController
         // Simpan data ke database
         $user->save([
             'email' => $this->request->getVar('email'),
-            'pass' => password_hash($this->request->getVar('pass'), PASSWORD_DEFAULT), // Hash password
+            'password' => password_hash($this->request->getVar('pass'), PASSWORD_DEFAULT), // Hash password
+            'namaToko' => 'tokosaya.co',
         ]);
     
         // Set flashdata
@@ -75,16 +78,16 @@ class Home extends BaseController
         $email = $this->request->getVar('email');
         $password = $this->request->getVar('password');
 
-        $actor = $model->where('email', $email)->first();
+        $user = $model->where('email', $email)->first();
 
-        if($actor){
-            if(password_verify($password, $actor['pass'])){
+        if($user){
+            if(password_verify($password, $user['password'])){
                 $session->set([
-                    'id' => $actor['id_user'],
-                    'email' => $actor['email'],
+                    'id' => $user['idPemilik'],
+                    'email' => $user['email'],
                     'isLoggedIn' => true
                 ]);
-                $session->setFlashdata('pesan', "Welcome {$actor['email']}");
+                $session->setFlashdata('pesan', "Welcome {$user['email']}");
                 return redirect()->to('/dashboard');
             } else {
                 return redirect()->to('user/login')->with('error', 'Password salah!');

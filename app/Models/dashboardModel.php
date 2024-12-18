@@ -4,10 +4,10 @@ namespace App\Models;
 
 use CodeIgniter\Model;
 
-class produkModel extends Model
+class dashboardModel extends Model
 {
     protected $table = 'produk';
-    protected $primaryKey = 'idProduk'; // Pastikan primary key adalah 'idProduk'
+    protected $id = 'idPemilik';
     protected $allowedFields = [
             'idProduk',
             'idPemilik',
@@ -21,7 +21,7 @@ class produkModel extends Model
     public function search($keyword){
         $builder = $this->table('produk');
         $builder->like('namaProduk', $keyword);
-        $builder->orLike('namaProduk', $keyword);
+        $builder->orLike('kodeProduk', $keyword);
         return $builder;
     }
 }
