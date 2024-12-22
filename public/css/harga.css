@@ -15,14 +15,14 @@ section {
 .contener {
     width: 80%;
     display: flex;
-    justify-content: space-between;
+    justify-content: center;
     align-items: center;
     gap: 25px;
     margin: 50px;
 }
 .card {
     background-color: #f0f0f0;
-    width: 30%;
+    width: 250px;
     padding: 10px;
     border-radius: 10px;
     border: 1px solid #b8b6b6;
@@ -83,4 +83,17 @@ section {
     text-decoration: none;
     background-color: dodgerblue;
     color: white;
+}
+
+button {
+    font-weight: 800;
+    gap: 10px;
+    padding: 10px 20px;
+    width: 200px;
+    text-align: center;
+    border-radius: 5px;
+    text-decoration: none;
+    background-color: dodgerblue;
+    color: white;
+    border: none;
 }

@@ -5,6 +5,9 @@ namespace App\Controllers;
 use App\Models\dashboardModel;
 use App\Models\produkModel;
 use App\Models\riwayatModel;
+use App\Models\memberRiwayatModel;
+use App\Models\memberModel;
+use App\Models\userModel;
 
 class dashboard extends BaseController {
 
@@ -12,6 +15,9 @@ class dashboard extends BaseController {
     protected $produkModel;
     protected $dashboardModel;
     protected $riwayatModel;
+    protected $memberRiwayatModel;
+    protected $memberModel;
+    protected $userModel;
 
     //session setting
     public function __construct()
@@ -22,6 +28,9 @@ class dashboard extends BaseController {
         $this->dashboardModel = new dashboardModel();
         $this->produkModel = new ProdukModel();
         $this->riwayatModel = new riwayatModel();
+        $this->memberRiwayatModel = new memberRiwayatModel();
+        $this->memberModel = new memberModel();
+        $this->userModel = new userModel();
     }
 
     //tampilan menu produk
@@ -49,7 +58,7 @@ class dashboard extends BaseController {
 
         $data = [
             'email' => $email,
-            'produk' => $produk->where(['idPemilik' => $idUser])->paginate(6, 'produk'),
+            'produk' => $produk->where(['idPemilik' => $idUser])->orderBy('idProduk', 'DESC')->paginate(6, 'produk'),
             'pager' => $this->dashboardModel->pager,
             'const' => $cosnt,
         ];
@@ -58,7 +67,67 @@ class dashboard extends BaseController {
         echo view('dashboard/dashboard', $data);
     }
 
+    public function getStatus($idMember){
+        $token = base64_encode("SB-Mid-server-q4ppcQcdpq527CEJu77uY4Gf");
+        $url = "https://api.sandbox.midtrans.com/v2/" . $idMember . "/status";
+        
+        // Perbaiki header dan penulisan 'Authorization' dengan benar
+        $header = array(
+            'Accept: application/json',  // Perbaiki penulisan 'Accept' dan 'application/json'
+            'Authorization: Basic ' . $token,  // Tambahkan spasi setelah 'Basic'
+            'Content-Type: application/json'  // Perbaiki penulisan 'application/json'
+        );
+        
+        $ch = curl_init();
+        
+        // Perbaiki penulisan CURLOPT_URL
+        curl_setopt($ch, CURLOPT_URL, $url);  
+        curl_setopt($ch, CURLOPT_HTTPHEADER, $header);
+        curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'GET');
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        
+        $result = curl_exec($ch);
+        curl_close($ch);
+        // Perbaiki json_decode (huruf kecil 'd')
+        return json_decode($result, true);
+        
+        // Debug hasil curl
+        //dd($hasil);  // Untuk melihat hasil response
+    }
 
+    public function profil(){
+
+        $email = $this->session->get('email');
+        $idUser = $this->session->get('id');
+
+        if(!$email){
+            return redirect()->to('user');
+        }
+
+        $belanja = $this->memberModel->joinTable()->where(['idPemilik' => $idUser])->findAll();
+
+        foreach ($belanja as &$item) {
+            $idMember = $item['idMember'];
+            $status = $this->getStatus($idMember);
+    
+            // Tambahkan status ke item belanja
+            $item['status'] = isset($status['status_code']) && $status['status_code'] == '200' 
+                ? 'Berhasil' 
+                : 'Belum Dibayar';
+
+        }
+
+
+
+        $data = [
+            'email' => $email,
+            'belanja' => $belanja
+            
+        ];
+
+        echo view('dashboard/navbar', $data);
+        echo view('dashboard/profil', $data);
+    }
 
     //tampilan menu stok masuk
     public function stokMasuk(){
@@ -82,7 +151,7 @@ class dashboard extends BaseController {
 
         $data = [
             'email' => $email,
-            'produk' => $produk->where(['idPemilik' => $idUser])->paginate(6, 'produk'),
+            'produk' => $produk->where(['idPemilik' => $idUser])->orderBy('idProduk', 'DESC')->paginate(6, 'produk'),
             'pager' => $produk->pager,
         ];
         echo view('dashboard/navbar', $data);
@@ -107,7 +176,7 @@ class dashboard extends BaseController {
 
         $data = [
             'email' => $email,
-            'produk' => $produk->where(['idPemilik' => $idUser])->paginate(6, 'produk'),
+            'produk' => $produk->where(['idPemilik' => $idUser])->orderBy('idProduk', 'DESC')->paginate(6, 'produk'),
             'pager' => $produk->pager,
         ];
         echo view('dashboard/navbar', $data);
@@ -149,33 +218,38 @@ class dashboard extends BaseController {
 
 //public function tambah
     public function save(){
+        //set waktu berdasarkan wilayah jakarta
         date_default_timezone_set('Asia/Jakarta');
         $ProdukModel = new ProdukModel();
         $riwayatModel = new riwayatModel();
         $idUser = $this->session->get('id');
 
-        //validasi form
+        //mevalidasi form agar kode produk tidak sama dengan produk laiinya.
         if(!$this->validate([
             'kode_barang' => [
-                'rules' => 'is_unique[produk.idProduk]',
+                'rules' => 'is_unique[produk.kodeProduk]',
                 'errors' => [
                     'is_unique' => '{field} sudah digunakan'
                 ]
             ]
         ])) {
+            //mensetkan pesan kesalahan
             $validation = \Config\Services::validation();
-            //dd($validation);
+
+            //mengirimkan pesan kesalahan ke tampilan form
             return redirect()->to('/dashboard/add')->withInput()->with('validation', $validation);
         }
 
+        //fungsi untuk memasukkan data produk ke dalam table riwayat
         $riwayatModel->save([
             'idPemilik' => $idUser,
             'kodeProduk' => $this->request->getPost('kode_barang'),
             'namaProduk' => $this->request->getPost('nama_barang'),
             'status' => 'Baru',
             'jumlah' => $this->request->getPost('jumlah'),
-            'tanggal' => date('Y-m-d') 
+            'tanggal' => date('d-m-Y') 
         ]);
+        //fungsi untuk memasukkan data produk ke dalam table produk
 
         $produk = $ProdukModel-> save([
             'idPemilik' => $this->request->getPost('idUser'),
@@ -186,6 +260,7 @@ class dashboard extends BaseController {
             'harga' => $this->request->getVar('harga'),
         ]);
 
+        //mengatur session untuk memberitahukan produk telah di isi
         session()->setFlashdata('pesan', 'Produk Berhasil Ditambahkan');
         return redirect()->to('/dashboard');
     }
@@ -346,6 +421,8 @@ public function riwayat(){
             return redirect()->to('user');
         }
 
+        $status = $this->userModel->select('status')->where('idPemilik', $idUser)->first();
+
         $cosnt = $this->request->getVar('page_produk') ? $this->request->getVar('page_produk') : 1;
 
         //$where = $ProdukModel->where(['id_user' => $idUser])->first();
@@ -354,13 +431,20 @@ public function riwayat(){
 
         $data = [
             'email' => $email,
-            'produk' => $this->riwayatModel->where(['idPemilik' => $idUser])->paginate(6, 'riwayat'),
+            'produk' => $this->riwayatModel->where(['idPemilik' => $idUser])->orderBy('idRiwayat', 'DESC')->paginate(6, 'riwayat'),
             'pager' => $this->riwayatModel->pager,
             'const' => $cosnt,
         ];
 
         echo view('dashboard/navbar', $data);
-        echo view('dashboard/riwayat', $data);
+
+        if($status == 'Tidak Aktif'){
+            echo view('blank');
+        } else {
+            echo view('dashboard/riwayat', $data);
+        }
+
+
 }
 
     

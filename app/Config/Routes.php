@@ -34,3 +34,7 @@ $routes->post('/dashboard/update/(:num)', 'dashboard::update/$1');
 $routes->post('/dashboard/masuk/(:num)', 'dashboard::tambahJumlah/$1');
 $routes->post('/dashboard/keluar/(:num)', 'dashboard::kurangJumlah/$1');
 
+
+$routes->post('/pembayaran', 'landpage::praTransaksi');
+$routes->get('/dashboard/profil', 'dashboard::profil');
+

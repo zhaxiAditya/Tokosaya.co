@@ -135,7 +135,7 @@
     <div class="nav-top">
         <h3>Tokosaya<sup>Co</sup></h3>
         <section>
-            <a href="">
+            <a href="<?php echo base_url('dashboard/profil');?>">
                 <i class="fa-solid fa-user"></i>
                 <span><?php echo $email ;?></span>
             </a>

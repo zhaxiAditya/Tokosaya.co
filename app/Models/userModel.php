@@ -7,9 +7,12 @@ use CodeIgniter\Model;
 class userModel extends Model
 {
     protected $table = 'pemilikToko';
+    protected $primaryKey = 'idPemilik';
     protected $allowedFields = [
         'email',
         'password',
-        'namaToko'
+        'namaToko',
+        'status',
+        'tanggalAkhir'
     ];
 }
