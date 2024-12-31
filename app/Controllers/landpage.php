@@ -3,20 +3,20 @@
 namespace App\Controllers;
 use App\Models\memberModel;
 use App\Models\userModel;
-use App\Models\memberRiwayatModel;
+use App\Models\transaksiModel;
 
 class landpage extends BaseController
 {
     protected $session;
     protected $memberModel;
     protected $userModel;
-    protected $memberRiwayatModel;
+    protected $transaksiModel;
 
     public function __Construct(){
         $this->session = \Config\Services::session();
         $this->memberModel = new memberModel;
         $this->userModel = new userModel;
-        $this->memberRiwayatModel = new memberRiwayatModel;
+        $this->transaksiModel = new transaksiModel;
     }
     public function index()
     {
@@ -49,13 +49,14 @@ class landpage extends BaseController
 
         $user = $this->userModel->where(['idPemilik' => $idUser])->first();
         $hargas = $this->memberModel->select('harga')->where(['idMembership' => $idMember])->first();
+        $durasi = $this->memberModel->select('durasi')->where(['idMembership' => $idMember])->first();
         $tanggal = $this->userModel->select('tanggalAkhir')->where(['idPemilik' => $idUser])->first();
 
         $harga = $hargas['harga'];
         $tanggal = $tanggal['tanggalAkhir'];
         $tanggalSekarang = date('Y-m-d');
 
-        $durasi = 30;
+        $durasi = $durasi['durasi'];
 
 
         /*Install Midtrans PHP Library (https://github.com/Midtrans/midtrans-php)
@@ -92,8 +93,8 @@ class landpage extends BaseController
          );
         $snapToken = \Midtrans\Snap::getSnapToken($params);
 
-        $this->memberRiwayatModel->save([
-            'idMember' => $order_id,
+        $this->transaksiModel->save([
+            'idTransaksi' => $order_id,
             'idPemilik' => $idUser,
             'idMembership' => $idMember,
             'noToken' => $snapToken
@@ -112,7 +113,7 @@ class landpage extends BaseController
 
         
         $data = ([
-            'status' => 'Tidak Aktif',
+            'status' => 'Aktif',
             'tanggalAkhir' => $tanggalAkhirBaru,
         ]);
         

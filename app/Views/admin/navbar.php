@@ -115,22 +115,14 @@
 <body>
     <div class="nav-lift">
         <nav>
-            <a href="<?php echo base_url('dashboard');?>" class="menu active">
+            <a href="<?php echo base_url('admin');?>" class="menu active">
                 <i class="fa-solid fa-boxes-packing"></i>
-                <span>Produk</span>
+                <span>user</span>
             </a>
-            <a href="<?php echo base_url('dashboard/masuk');?>" class="menu">
+            <!-- <a href="<?php echo base_url('dashboard/masuk');?>" class="menu">
                 <i class="fa-solid fa-right-to-bracket"></i>
-                <span>Produk Masuk</span>
-            </a>
-            <a href="<?php echo base_url('dashboard/keluar');?>" class="menu">
-                <i class="fa-solid fa-arrow-right-from-bracket"></i>
-                <span>Produk Keluar</span>
-            </a>
-            <a href="<?php echo base_url('dashboard/riwayat');?>" class="menu">
-                <i class="fa-solid fa-right-left"></i>
-                <span>Riwayat Produk</span>
-            </a>
+                <span>Transaksi</span>
+            </a> -->
         </nav>
         <a href="<?php echo base_url('/logout');?>" class="logout">
             <span>keluar</span>

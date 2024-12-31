@@ -87,6 +87,26 @@ class Home extends BaseController
                     'email' => $user['email'],
                     'isLoggedIn' => true
                 ]);
+                $idUser = $user['idPemilik'];
+
+                $tanggal = $user['tanggalAkhir'];
+                $tanggalSekarang = date('Y-m-d');
+
+                $tanggalAkhir = strtotime($tanggal);
+                $tanggalSekarang = strtotime($tanggalSekarang);
+
+                $tanggal = ([
+                    'tanggalAkhir' => $tanggalAkhir,
+                    'tanggalSekarang' => $tanggalSekarang
+                ]);
+
+                $data = ([
+                    'status' => 'tidakAktif'
+                ]);
+
+                if($tanggalAkhir < $tanggalSekarang){
+                    $model->update($user['idPemilik'], $data);
+                }
                 $session->setFlashdata('pesan', "Welcome {$user['email']}");
                 return redirect()->to('/dashboard');
             } else {

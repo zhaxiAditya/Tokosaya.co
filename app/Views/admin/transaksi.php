@@ -1,3 +1,4 @@
+
 <style>
     .search {
         display: flex;
@@ -26,6 +27,13 @@
         font-weight: 600;
         color: #fefefe;
         border-radius: 0.2rem;
+    }
+
+    td a {
+        display: flex;
+        flex-direction: row;
+        gap: 1rem;
+        align-items: center;
     }
 
     td a {
@@ -83,32 +91,40 @@
                 <?php echo session()->getFlashdata('pesan');?>
             </div>
         <?php endif; ?>
-        <h3 style="width: 80%;">Tokosaya</h3>
+        <h3 style="width: 80%;">Data user</h3>
+        <div class="search">
+            <form action="" method="post">
+            <input type="text" name="keyword" placeholder="Cari Produk">
+            <button>Cari</button>
+            </form>
+        </div>
         <div class="table-container">
             <table>
                 <thead>
                     <tr>
-                        <th>Nama paket</th>
-                        <th>No Resi</th>
-                        <th>Harga</th>
-                        <th>Durasi</th>
-                        <th>Status</th>
-                        <th>Aksi</th>
+                        <th>No</th>
+                        <th>email</th>
+                        <th>Status Membership</th>
+                        <th>Tanggal Akhir Langganan</th>
                     </tr>
                 </thead>
                 <tbody>
-                    <?php foreach($belanja as $b):
- ?>
+                    <?php $i = 1 ?>
+                    <?php foreach($user as $u): ?>
                     <tr>
-                        <td><?php echo $b['namaMembership'] ;?></td>
-                        <td><?php echo $b['noToken'];?></td>
-                        <td><?php echo $b['harga'];?></td>
-                        <td><?php echo $b['durasi'];?>Hari</td>
-                        <td><?= $b['status'];?></td>
-                        <td style="display: flex; gap: 1rem;">
-                            <a href="https://app.sandbox.midtrans.com/snap/v2/vtweb/<?php echo $b['noToken'];?>">Bayar</a>
-                        </td>
+                        <td><?php echo $i ;?></td>
+                        <td><?php echo $u['email'];?></td>
+                        <td><?php
+                        $user = $u['status'];
+                        if($user == 'aktif'){
+                            echo 'Aktif';
+                        }else {
+                            echo 'Tidak Aktif';
+                        }
+                        ?></td>
+                        <td><?php echo $u['tanggalAkhir'];?></td>
                     </tr>
+                    <?php $i++; ?>
                     <?php endforeach; ?>
                 </tbody>
             </table>
@@ -116,3 +132,4 @@
     </div>
 </body>
 </html>
+

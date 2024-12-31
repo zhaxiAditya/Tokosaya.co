@@ -36,5 +36,6 @@ $routes->post('/dashboard/keluar/(:num)', 'dashboard::kurangJumlah/$1');
 
 
 $routes->post('/pembayaran', 'landpage::praTransaksi');
-$routes->get('/dashboard/profil', 'dashboard::profil');
+
+$routes->get('/admin', 'admin::index');
 

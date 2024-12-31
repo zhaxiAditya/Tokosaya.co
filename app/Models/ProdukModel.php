@@ -21,7 +21,7 @@ class produkModel extends Model
     public function search($keyword){
         $builder = $this->table('produk');
         $builder->like('namaProduk', $keyword);
-        $builder->orLike('namaProduk', $keyword);
+        $builder->orLike('kodeProduk', $keyword);
         return $builder;
     }
 }

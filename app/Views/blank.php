@@ -11,9 +11,6 @@
     justify-content: center;
 
 }
-.textbox a{
-    text-decoration: none;   
-}
 .textbox h1 {
     padding: 1rem 2rem;
     background-color: #4DA1A9;
@@ -28,16 +25,17 @@
     color: black;
     padding: 1rem;
 }
-.textbox span {
+.textbox a {
+    text-decoration: none;
     color: blue;
 }
 
 </style>
 <div class="content">
 <div class="textbox">
-    <a href="">
+    <div class="box">
         <h1>Akses Riwayat dibatasi!</h1>
-        <p>Berlangganan untuk Akses Fitur Riwayat ini. <span>Berlangganan Sekarang!</span></p>
-    </a>
+        <p>Berlangganan untuk Akses Fitur Riwayat ini. <a href="<?= base_url('/harga')?>">Berlangganan Sekarang!</a></p>
+    </div>
 </div>
 </div>
